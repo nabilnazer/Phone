@@ -333,7 +333,8 @@ class RecentCallsAdapter(
 
     private fun launchContactDetailsIntent(contact: Contact?) {
         if (contact != null) {
-            activity.startContactDetailsIntent(contact)
+            val recentNumber = getSelectedItems().firstOrNull()?.phoneNumber
+            activity.startContactDetailsIntent(contact, recentNumber)
         }
     }
 

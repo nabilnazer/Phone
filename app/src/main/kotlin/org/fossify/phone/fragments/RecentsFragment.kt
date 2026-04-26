@@ -208,9 +208,14 @@ class RecentsFragment(
                         val recentCall = it as RecentCall
                         val contact = findContactByCall(recentCall)
                         if (contact != null) {
-                            activity?.startContactDetailsIntent(contact)
+                            activity?.startContactDetailsIntent(contact, recentCall.phoneNumber)
                         } else {
-                            activity?.startAddContactIntent(recentCall.phoneNumber)
+                            // Unknown number → open our new Call Detail screen.
+                            (activity as? SimpleActivity)?.let { simpleActivity ->
+                                org.fossify.phone.activities.ContactDetailActivity.launchUnknownNumber(
+                                    simpleActivity, recentCall.phoneNumber
+                                )
+                            }
                         }
                     }
                 )

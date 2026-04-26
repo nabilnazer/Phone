@@ -13,6 +13,40 @@
     <string name="filter_missed">Missed</string>
     <string name="show_call_info">Show call info</string>
 
+    <!-- Contact detail (Build 2) -->
+    <string name="action_call">Call</string>
+    <string name="action_message">Message</string>
+    <string name="action_whatsapp">WhatsApp</string>
+    <string name="badge_recents">Recents</string>
+    <string name="contact_no_company">No company</string>
+    <string name="ringtone">Ringtone</string>
+    <string name="ringtone_default">Default</string>
+    <string name="preferred_sim">Preferred SIM</string>
+    <string name="preferred_sim_default">Default</string>
+    <string name="preferred_sim_1">SIM 1</string>
+    <string name="preferred_sim_2">SIM 2</string>
+    <string name="more_details">More</string>
+    <string name="address">Address</string>
+    <string name="birthday">Birthday</string>
+    <string name="notes">Notes</string>
+    <string name="website">Website</string>
+    <string name="im_accounts">IM / Social</string>
+    <string name="groups">Groups</string>
+    <string name="call_history_for_contact">Call history</string>
+    <string name="clear">Clear</string>
+    <string name="favourite">Favourite</string>
+    <string name="edit">Edit</string>
+    <string name="more">More</string>
+    <string name="qr_share">Share via QR</string>
+    <string name="add_to_existing_contact">Add to existing contact</string>
+    <string name="create_new_contact">Create new contact</string>
+    <string name="send_to_spam">Send to spam</string>
+    <string name="copy_number">Copy number</string>
+    <string name="block_number_short">Block</string>
+    <string name="share_short">Share</string>
+    <string name="whatsapp_not_installed">WhatsApp is not installed</string>
+    <string name="not_yet_implemented">This action will be wired up in a later build</string>
+
     <!-- Contacts -->
     <string name="could_not_access_contacts">Could not access your contacts</string>
 
