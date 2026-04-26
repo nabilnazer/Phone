@@ -22,23 +22,40 @@ fun hasSigningVars(): Boolean {
             && providers.environmentVariable("SIGNING_STORE_PASSWORD").orNull != null
 }
 
+// Persistent debug keystore. When the file exists at the project root the build
+// uses it for debug builds so installs from different CI runs share a signature
+// (Android refuses to update an APK signed with a different key). The file is
+// produced in CI by decoding the DEBUG_KEYSTORE_BASE64 secret; locally it can
+// be absent and Gradle falls back to Android's auto-generated debug.keystore.
+val customDebugKeystore: File = rootProject.file("debug.keystore")
+
 base {
-    val versionCode = project.property("VERSION_CODE").toString().toInt()
-    archivesName = "phone-$versionCode"
+    val baseVersionName = project.property("VERSION_NAME").toString()
+    archivesName = "phone-v$baseVersionName"
 }
 
 android {
     compileSdk = project.libs.versions.app.build.compileSDKVersion.get().toInt()
 
     defaultConfig {
-        applicationId = project.property("APP_ID").toString()
+        applicationId = project.property("APPLICATION_ID").toString()
         minSdk = project.libs.versions.app.build.minimumSDK.get().toInt()
         targetSdk = project.libs.versions.app.build.targetSDK.get().toInt()
-        versionName = project.property("VERSION_NAME").toString()
+        val baseVersionName = project.property("VERSION_NAME").toString()
+        val buildDate = java.time.LocalDate.now(java.time.ZoneOffset.UTC).toString()
+        versionName = "$baseVersionName ($buildDate)"
         versionCode = project.property("VERSION_CODE").toString().toInt()
     }
 
     signingConfigs {
+        if (customDebugKeystore.exists()) {
+            register("customDebug") {
+                storeFile = customDebugKeystore
+                storePassword = "android"
+                keyAlias = "androiddebugkey"
+                keyPassword = "android"
+            }
+        }
         if (keystorePropertiesFile.exists()) {
             register("release") {
                 keyAlias = keystoreProperties.getProperty("keyAlias")
@@ -54,7 +71,7 @@ android {
                 storePassword = providers.environmentVariable("SIGNING_STORE_PASSWORD").get()
             }
         } else {
-            logger.warn("Warning: No signing config found. Build will be unsigned.")
+            logger.warn("Warning: No release signing config found. Release build will be unsigned.")
         }
     }
 
@@ -66,6 +83,9 @@ android {
     buildTypes {
         debug {
             applicationIdSuffix = ".debug"
+            if (customDebugKeystore.exists()) {
+                signingConfig = signingConfigs.getByName("customDebug")
+            }
         }
         release {
             isMinifyEnabled = true
