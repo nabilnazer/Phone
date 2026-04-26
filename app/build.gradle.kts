@@ -2,6 +2,9 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.kotlin.konan.properties.Properties
 import java.io.FileInputStream
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.TimeZone
 
 plugins {
     alias(libs.plugins.android)
@@ -42,7 +45,9 @@ android {
         minSdk = project.libs.versions.app.build.minimumSDK.get().toInt()
         targetSdk = project.libs.versions.app.build.targetSDK.get().toInt()
         val baseVersionName = project.property("VERSION_NAME").toString()
-        val buildDate = java.time.LocalDate.now(java.time.ZoneOffset.UTC).toString()
+        val buildDate = SimpleDateFormat("yyyy-MM-dd").apply {
+            timeZone = TimeZone.getTimeZone("UTC")
+        }.format(Date())
         versionName = "$baseVersionName ($buildDate)"
         versionCode = project.property("VERSION_CODE").toString().toInt()
     }
