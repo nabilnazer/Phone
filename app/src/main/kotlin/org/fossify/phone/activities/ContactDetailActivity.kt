@@ -14,9 +14,7 @@ import org.fossify.commons.extensions.beVisibleIf
 import org.fossify.commons.extensions.copyToClipboard
 import org.fossify.commons.extensions.getPhoneNumberTypeText
 import org.fossify.commons.extensions.getProperTextColor
-import org.fossify.commons.extensions.isPackageInstalled
 import org.fossify.commons.extensions.launchSendSMSIntent
-import org.fossify.commons.extensions.launchViewIntent
 import org.fossify.commons.extensions.showErrorToast
 import org.fossify.commons.extensions.toast
 import org.fossify.commons.extensions.updateTextColors
@@ -509,23 +507,25 @@ class ContactDetailActivity : SimpleActivity() {
     }
 
     private fun openWhatsApp(rawNumber: String) {
-        val whatsAppPackage = "com.whatsapp"
-        if (!isPackageInstalled(whatsAppPackage)) {
-            // Some devices have only WhatsApp Business installed
-            val business = "com.whatsapp.w4b"
-            if (!isPackageInstalled(business)) {
-                toast(R.string.whatsapp_not_installed)
-                return
-            }
-        }
-        // wa.me format requires only digits and a leading country code (no +, spaces, or dashes)
+        // wa.me format requires only digits and a leading country code (no +, spaces, or dashes).
         val normalized = rawNumber.replace(Regex("[^0-9]"), "")
         val uri = Uri.parse("https://wa.me/$normalized")
-        try {
-            launchViewIntent(uri.toString())
-        } catch (e: Exception) {
-            showErrorToast(e)
+
+        // On Android 11+ (target SDK 30+), an explicit setPackage() check requires the
+        // target package to be declared in <queries> in the manifest — which we do for
+        // both WhatsApp variants. We try the consumer app first, then WhatsApp Business
+        // as a fallback, and only show the "not installed" toast if both genuinely fail.
+        val candidates = listOf("com.whatsapp", "com.whatsapp.w4b")
+        for (pkg in candidates) {
+            val intent = Intent(Intent.ACTION_VIEW, uri).apply { setPackage(pkg) }
+            try {
+                startActivity(intent)
+                return
+            } catch (_: android.content.ActivityNotFoundException) {
+                // try the next candidate
+            }
         }
+        toast(R.string.whatsapp_not_installed)
     }
 
     private fun findMostRecentNumber(numbers: List<PhoneNumber>): String? {
