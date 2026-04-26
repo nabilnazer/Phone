@@ -13,7 +13,6 @@ import androidx.appcompat.widget.PopupMenu
 import org.fossify.commons.extensions.beVisibleIf
 import org.fossify.commons.extensions.copyToClipboard
 import org.fossify.commons.extensions.getPhoneNumberTypeText
-import org.fossify.commons.extensions.getProperBackgroundColor
 import org.fossify.commons.extensions.getProperTextColor
 import org.fossify.commons.extensions.isPackageInstalled
 import org.fossify.commons.extensions.launchSendSMSIntent
@@ -67,7 +66,7 @@ class ContactDetailActivity : SimpleActivity() {
         binding = ActivityContactDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.contactDetailRoot.setBackgroundColor(getProperBackgroundColor())
+        binding.contactDetailRoot.setBackgroundResource(R.color.contact_detail_bg)
 
         binding.backButton.setOnClickListener { finish() }
         binding.qrButton.setOnClickListener { toast(R.string.not_yet_implemented) }
@@ -81,7 +80,36 @@ class ContactDetailActivity : SimpleActivity() {
         binding.qrButton.setColorFilter(textColor)
         binding.moreChevron.setColorFilter(textColor)
 
+        applyEdgeToEdgeInsets()
         loadData()
+    }
+
+    private fun applyEdgeToEdgeInsets() {
+        // Edge-to-edge is on by default on AGP 9 / target SDK 36, so the bottom bar
+        // would otherwise sit underneath the system navigation bar. Add the navigation
+        // inset as bottom padding to keep the bar's content above it. Same for the
+        // top bar so it doesn't overlap the status bar.
+        androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(binding.bottomBar) { v, windowInsets ->
+            val nav = windowInsets.getInsets(androidx.core.view.WindowInsetsCompat.Type.navigationBars())
+            v.setPadding(v.paddingLeft, v.paddingTop, v.paddingRight, nav.bottom)
+            windowInsets
+        }
+        androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(binding.topBar) { v, windowInsets ->
+            val status = windowInsets.getInsets(androidx.core.view.WindowInsetsCompat.Type.statusBars())
+            v.setPadding(v.paddingLeft, status.top, v.paddingRight, v.paddingBottom)
+            windowInsets
+        }
+    }
+
+    private fun emailTypeLabel(type: Int, customLabel: String): String {
+        if (customLabel.isNotBlank()) return customLabel
+        return when (type) {
+            android.provider.ContactsContract.CommonDataKinds.Email.TYPE_HOME -> getString(org.fossify.commons.R.string.home)
+            android.provider.ContactsContract.CommonDataKinds.Email.TYPE_WORK -> getString(org.fossify.commons.R.string.work)
+            android.provider.ContactsContract.CommonDataKinds.Email.TYPE_MOBILE -> getString(org.fossify.commons.R.string.mobile)
+            android.provider.ContactsContract.CommonDataKinds.Email.TYPE_OTHER -> getString(org.fossify.commons.R.string.other)
+            else -> getString(org.fossify.commons.R.string.other)
+        }
     }
 
     override fun onResume() {
@@ -280,8 +308,7 @@ class ContactDetailActivity : SimpleActivity() {
         emails.forEach { email ->
             val rowBinding = ItemContactEmailBinding.inflate(LayoutInflater.from(this), binding.emailsCard, false)
             rowBinding.emailValue.text = email.value
-            val labelText = if (email.label.isNotBlank()) email.label else email.type.toString()
-            rowBinding.emailLabel.text = labelText
+            rowBinding.emailLabel.text = emailTypeLabel(email.type, email.label)
             rowBinding.emailRowRoot.setOnClickListener {
                 val mailto = Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:${email.value}"))
                 try {

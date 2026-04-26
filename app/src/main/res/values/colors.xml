@@ -7,4 +7,8 @@
     <color name="tab_active_green">#1FAB52</color>
     <color name="filter_pill_active_bg">#1FAB52</color>
     <color name="filter_pill_inactive_bg">#1F808080</color>
+
+    <!-- Contact detail screen (Build 2). Light theme defaults; values-night/ provides dark variants. -->
+    <color name="contact_detail_bg">#F2F2F2</color>
+    <color name="contact_detail_card_bg">#FFFFFF</color>
 </resources>

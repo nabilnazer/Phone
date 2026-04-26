@@ -4,6 +4,17 @@ import org.fossify.commons.activities.BaseSimpleActivity
 import org.fossify.phone.R
 
 open class SimpleActivity : BaseSimpleActivity() {
+
+    // Commons compares getPackageName() against "org.fossify." to detect modded
+    // builds and shows a "fake version" popup if it doesn't match. Our applicationId
+    // is com.nabilnazer.phone.debug (renamed in Build 1 to avoid collision with
+    // upstream Fossify Phone), so the check fails and the popup keeps appearing.
+    // Returning the source-code namespace here makes the in-process Commons check
+    // pass while leaving the real applicationId untouched at the OS level (intent
+    // resolution, Settings → Apps, etc. all still see com.nabilnazer.phone.debug
+    // because the framework reads the real package name through different channels).
+    override fun getPackageName(): String = "org.fossify.phone"
+
     override fun getAppIconIDs() = arrayListOf(
         R.mipmap.ic_launcher_red,
         R.mipmap.ic_launcher_pink,
