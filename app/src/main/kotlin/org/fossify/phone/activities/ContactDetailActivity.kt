@@ -21,9 +21,9 @@ import org.fossify.commons.extensions.toast
 import org.fossify.commons.helpers.ContactsHelper
 import org.fossify.commons.helpers.SimpleContactsHelper
 import org.fossify.commons.helpers.ensureBackgroundThread
+import org.fossify.commons.models.PhoneNumber
 import org.fossify.commons.models.contacts.Contact
 import org.fossify.commons.models.contacts.Email
-import org.fossify.commons.models.contacts.PhoneNumber
 import org.fossify.phone.R
 import org.fossify.phone.databinding.ActivityContactDetailBinding
 import org.fossify.phone.databinding.ItemContactDetailFieldBinding
