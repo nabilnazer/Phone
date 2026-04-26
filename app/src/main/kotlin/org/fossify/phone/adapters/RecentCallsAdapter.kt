@@ -528,8 +528,8 @@ class RecentCallsAdapter(
                 }
 
                 // Duration TextViews are kept in the layout for binding compatibility but unused in the redesigned row.
-                itemRecentsDateTimeDurationSeparator.beGone()
-                itemRecentsDuration.beGone()
+                itemRecentsDateTimeDurationSeparator.beVisibleIf(false)
+                itemRecentsDuration.beVisibleIf(false)
 
                 itemRecentsLocation.apply {
                     val companyText = matchingContact?.organization?.company?.takeIf { it.isNotBlank() }
