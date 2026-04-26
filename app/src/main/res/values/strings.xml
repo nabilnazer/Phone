@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Display name on the launcher (overrides Commons app_launcher_name) and in the About screen header (overrides Commons app_name). -->
+    <!-- Display name on the launcher. The companion app_name (used by About screen) lives in donottranslate.xml. -->
     <string name="app_launcher_name">Phone</string>
-    <string name="app_name">Phone</string>
     <string name="default_phone_app_prompt">Please make this app the default Phone app</string>
     <string name="allow_displaying_over_other_apps">Please allow displaying over other apps for reliable behaviour</string>
 
