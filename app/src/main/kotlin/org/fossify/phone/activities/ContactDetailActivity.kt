@@ -13,11 +13,14 @@ import androidx.appcompat.widget.PopupMenu
 import org.fossify.commons.extensions.beVisibleIf
 import org.fossify.commons.extensions.copyToClipboard
 import org.fossify.commons.extensions.getPhoneNumberTypeText
+import org.fossify.commons.extensions.getProperBackgroundColor
+import org.fossify.commons.extensions.getProperTextColor
 import org.fossify.commons.extensions.isPackageInstalled
 import org.fossify.commons.extensions.launchSendSMSIntent
 import org.fossify.commons.extensions.launchViewIntent
 import org.fossify.commons.extensions.showErrorToast
 import org.fossify.commons.extensions.toast
+import org.fossify.commons.extensions.updateTextColors
 import org.fossify.commons.helpers.ContactsHelper
 import org.fossify.commons.helpers.SimpleContactsHelper
 import org.fossify.commons.helpers.ensureBackgroundThread
@@ -64,11 +67,19 @@ class ContactDetailActivity : SimpleActivity() {
         binding = ActivityContactDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.contactDetailRoot.setBackgroundColor(getProperBackgroundColor())
+
         binding.backButton.setOnClickListener { finish() }
         binding.qrButton.setOnClickListener { toast(R.string.not_yet_implemented) }
 
         binding.moreHeader.setOnClickListener { toggleMoreExpander() }
         binding.callLogClear.setOnClickListener { toast(R.string.not_yet_implemented) }
+
+        // Tint top-bar icons so they're visible on dark themes too.
+        val textColor = getProperTextColor()
+        binding.backButton.setColorFilter(textColor)
+        binding.qrButton.setColorFilter(textColor)
+        binding.moreChevron.setColorFilter(textColor)
 
         loadData()
     }
@@ -172,6 +183,10 @@ class ContactDetailActivity : SimpleActivity() {
 
         // Bottom bar — known contact: Favourite / Edit / More
         configureBottomBar(forKnownContact = true, contact = c)
+
+        // Apply theme text colors after all rows have been inflated.
+        updateTextColors(binding.contactDetailRoot)
+        tintActionRowIcons()
     }
 
     private fun renderUnknownNumber(number: String) {
@@ -208,6 +223,21 @@ class ContactDetailActivity : SimpleActivity() {
 
         // Bottom bar — unknown: Create new contact / Add to existing / More
         configureBottomBar(forKnownContact = false, contact = null, unknownNumberFallback = number)
+
+        updateTextColors(binding.contactDetailRoot)
+        tintActionRowIcons()
+    }
+
+    private fun tintActionRowIcons() {
+        val textColor = getProperTextColor()
+        // Each action card is a LinearLayout with [ImageView, TextView] children.
+        listOf(binding.actionCall, binding.actionMessage, binding.actionWhatsapp).forEach { card ->
+            val icon = card.getChildAt(0) as? android.widget.ImageView
+            icon?.setColorFilter(textColor)
+        }
+        binding.bottomButton1Icon.setColorFilter(textColor)
+        binding.bottomButton2Icon.setColorFilter(textColor)
+        binding.bottomButton3Icon.setColorFilter(textColor)
     }
 
     private fun renderPhoneNumbers(numbers: List<PhoneNumber>, contactName: String) {

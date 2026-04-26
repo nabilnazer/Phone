@@ -69,7 +69,7 @@
                 tools:src="@drawable/ic_person_vector" />
 
             <!-- Name -->
-            <TextView
+            <org.fossify.commons.views.MyTextView
                 android:id="@+id/contact_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -80,7 +80,7 @@
                 tools:text="John Doe" />
 
             <!-- Company -->
-            <TextView
+            <org.fossify.commons.views.MyTextView
                 android:id="@+id/contact_company"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -120,7 +120,7 @@
                         android:contentDescription="@null"
                         android:src="@drawable/ic_call_filled_vector" />
 
-                    <TextView
+                    <org.fossify.commons.views.MyTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/tiny_margin"
@@ -147,7 +147,7 @@
                         android:contentDescription="@null"
                         android:src="@drawable/ic_message_vector" />
 
-                    <TextView
+                    <org.fossify.commons.views.MyTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/tiny_margin"
@@ -174,7 +174,7 @@
                         android:contentDescription="@null"
                         android:src="@drawable/ic_whatsapp_vector" />
 
-                    <TextView
+                    <org.fossify.commons.views.MyTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/tiny_margin"
@@ -218,14 +218,14 @@
                 android:orientation="horizontal"
                 android:paddingHorizontal="@dimen/normal_margin">
 
-                <TextView
+                <org.fossify.commons.views.MyTextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/ringtone"
                     android:textSize="@dimen/normal_text_size" />
 
-                <TextView
+                <org.fossify.commons.views.MyTextView
                     android:id="@+id/ringtone_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -247,14 +247,14 @@
                 android:orientation="horizontal"
                 android:paddingHorizontal="@dimen/normal_margin">
 
-                <TextView
+                <org.fossify.commons.views.MyTextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/preferred_sim"
                     android:textSize="@dimen/normal_text_size" />
 
-                <TextView
+                <org.fossify.commons.views.MyTextView
                     android:id="@+id/preferred_sim_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -276,7 +276,7 @@
                 android:orientation="horizontal"
                 android:paddingHorizontal="@dimen/normal_margin">
 
-                <TextView
+                <org.fossify.commons.views.MyTextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -338,7 +338,7 @@
                 android:visibility="gone"
                 tools:visibility="visible">
 
-                <TextView
+                <org.fossify.commons.views.MyTextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -346,7 +346,7 @@
                     android:textSize="@dimen/normal_text_size"
                     android:textStyle="bold" />
 
-                <TextView
+                <org.fossify.commons.views.MyTextView
                     android:id="@+id/call_log_clear"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -398,7 +398,7 @@
                 android:contentDescription="@null"
                 android:src="@drawable/ic_star_vector" />
 
-            <TextView
+            <org.fossify.commons.views.MyTextView
                 android:id="@+id/bottom_button_1_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -425,7 +425,7 @@
                 android:contentDescription="@null"
                 android:src="@drawable/ic_edit_vector" />
 
-            <TextView
+            <org.fossify.commons.views.MyTextView
                 android:id="@+id/bottom_button_2_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -452,7 +452,7 @@
                 android:contentDescription="@null"
                 android:src="@drawable/ic_three_dots_vector" />
 
-            <TextView
+            <org.fossify.commons.views.MyTextView
                 android:id="@+id/bottom_button_3_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

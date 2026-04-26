@@ -13,7 +13,7 @@
     android:paddingHorizontal="@dimen/normal_margin"
     android:paddingVertical="@dimen/small_margin">
 
-    <TextView
+    <org.fossify.commons.views.MyTextView
         android:id="@+id/email_value"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -21,7 +21,7 @@
         android:textStyle="bold"
         tools:text="john@acme.com" />
 
-    <TextView
+    <org.fossify.commons.views.MyTextView
         android:id="@+id/email_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
