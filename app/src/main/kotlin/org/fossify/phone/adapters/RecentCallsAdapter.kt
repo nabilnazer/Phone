@@ -507,9 +507,11 @@ class RecentCallsAdapter(
                     nameToShow = SpannableString(nameToShow.toString().highlightTextPart(textToHighlight, properPrimaryColor))
                 }
 
+                val isMissed = call.type == Calls.MISSED_TYPE
+
                 itemRecentsName.apply {
                     text = nameToShow
-                    setTextColor(textColor)
+                    setTextColor(if (isMissed) missedCallColor else textColor)
                     setTextSize(TypedValue.COMPLEX_UNIT_PX, currentFontSize)
                     isSelected = true
                 }
@@ -521,52 +523,48 @@ class RecentCallsAdapter(
                         call.startTS.formatTime(activity)
                     }
 
-                    setTextColor(if (call.type == Calls.MISSED_TYPE) missedCallColor else secondaryTextColor)
+                    setTextColor(if (isMissed) missedCallColor else secondaryTextColor)
                     setTextSize(TypedValue.COMPLEX_UNIT_PX, currentFontSize * 0.8f)
                 }
 
-                itemRecentsDateTimeDurationSeparator.apply {
-                    text = "•"
-                    setTextSize(TypedValue.COMPLEX_UNIT_PX, currentFontSize * 0.8f)
-                    setTextColor(textColor)
-                    beVisibleIf(shouldShowDuration)
-                }
-
-                itemRecentsDuration.apply {
-                    text = context.formatSecondsToShortTimeString(call.duration)
-                    setTextColor(textColor)
-                    beVisibleIf(shouldShowDuration)
-                    setTextSize(TypedValue.COMPLEX_UNIT_PX, currentFontSize * 0.8f)
-                    if (!showOverflowMenu) {
-                        itemRecentsDuration.setPadding(0, 0, durationPadding, 0)
-                    }
-                }
+                // Duration TextViews are kept in the layout for binding compatibility but unused in the redesigned row.
+                itemRecentsDateTimeDurationSeparator.beGone()
+                itemRecentsDuration.beGone()
 
                 itemRecentsLocation.apply {
-                    val locale = Locale.getDefault()
-                    val defaultCountryCode = locale.country
-                    val phoneNumber = try {
-                        phoneNumberUtilInstance
-                            .parse(call.phoneNumber, defaultCountryCode)
-                    } catch (_: NumberParseException) {
-                        null
-                    }
+                    val companyText = matchingContact?.organization?.company?.takeIf { it.isNotBlank() }
 
-                    val location = if (phoneNumber != null) {
-                        phoneNumberOfflineGeocoderInstance
-                            .getDescriptionForNumber(phoneNumber, locale, defaultCountryCode)
+                    val secondaryText: String? = if (companyText != null) {
+                        companyText
                     } else {
-                        null
+                        val locale = Locale.getDefault()
+                        val defaultCountryCode = locale.country
+                        val phoneNumber = try {
+                            phoneNumberUtilInstance.parse(call.phoneNumber, defaultCountryCode)
+                        } catch (_: NumberParseException) {
+                            null
+                        }
+
+                        val location = phoneNumber?.let {
+                            phoneNumberOfflineGeocoderInstance.getDescriptionForNumber(it, locale, defaultCountryCode)
+                        }
+
+                        // Show city/country only for unknown contacts when phone number parsed successfully and is not just the default country.
+                        if (matchingContact == null
+                            && phoneNumber != null
+                            && phoneNumber.countryCodeSource != Phonenumber.PhoneNumber.CountryCodeSource.FROM_DEFAULT_COUNTRY
+                            && !location.isNullOrBlank()
+                        ) {
+                            location
+                        } else {
+                            null
+                        }
                     }
 
-                    text = location
-                    setTextColor(textColor)
-                    setTextSize(TypedValue.COMPLEX_UNIT_PX, currentFontSize * 0.8f)
-                    beVisibleIf(
-                        phoneNumber != null
-                                && phoneNumber.countryCodeSource != Phonenumber.PhoneNumber.CountryCodeSource.FROM_DEFAULT_COUNTRY
-                                && (location != locale.displayCountry || matchingContact == null)
-                    )
+                    text = secondaryText
+                    setTextColor(secondaryTextColor)
+                    setTextSize(TypedValue.COMPLEX_UNIT_PX, currentFontSize * 0.85f)
+                    beVisibleIf(!secondaryText.isNullOrBlank())
                 }
 
                 itemRecentsSimImage.beVisibleIf(areMultipleSIMsAvailable && call.simID != -1)

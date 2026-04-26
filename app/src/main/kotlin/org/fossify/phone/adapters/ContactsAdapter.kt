@@ -414,6 +414,15 @@ class ContactsAdapter(
                 }
             }
 
+            // Company name below contact name (only present in our overridden list-row layout, not the grid).
+            val companyTextView = root.findViewById<TextView>(R.id.item_contact_company)
+            if (companyTextView != null) {
+                val company = contact.organization.company.takeIf { it.isNotBlank() }
+                companyTextView.text = company.orEmpty()
+                companyTextView.setTextColor(textColor)
+                companyTextView.beVisibleIf(company != null)
+            }
+
             if (enableDrag && textToHighlight.isEmpty()) {
                 dragHandleIcon.apply {
                     beVisibleIf(selectedKeys.isNotEmpty())

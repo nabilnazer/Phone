@@ -1,6 +1,7 @@
 package org.fossify.phone.fragments
 
 import android.content.Context
+import android.provider.CallLog.Calls
 import android.util.AttributeSet
 import org.fossify.commons.extensions.baseConfig
 import org.fossify.commons.extensions.beGone
@@ -40,6 +41,7 @@ class RecentsFragment(
     private var recentsAdapter: RecentCallsAdapter? = null
 
     private var searchQuery: String? = null
+    private var showMissedOnly = false
     private var recentsHelper = RecentsHelper(context)
 
     override fun onFinishInflate() {
@@ -62,6 +64,42 @@ class RecentsFragment(
                 requestCallLogPermission()
             }
         }
+
+        binding.filterPillAll.setOnClickListener {
+            if (showMissedOnly) {
+                showMissedOnly = false
+                updatePillStyles()
+                applyDisplayFilter()
+            }
+        }
+        binding.filterPillMissed.setOnClickListener {
+            if (!showMissedOnly) {
+                showMissedOnly = true
+                updatePillStyles()
+                applyDisplayFilter()
+            }
+        }
+        updatePillStyles()
+    }
+
+    private fun updatePillStyles() {
+        binding.filterPillAll.setBackgroundResource(
+            if (!showMissedOnly) R.drawable.bg_filter_pill_active else R.drawable.bg_filter_pill_inactive
+        )
+        binding.filterPillMissed.setBackgroundResource(
+            if (showMissedOnly) R.drawable.bg_filter_pill_active else R.drawable.bg_filter_pill_inactive
+        )
+    }
+
+    private fun applyDisplayFilter() {
+        val toShow: List<CallLogItem> = if (!showMissedOnly) {
+            allRecentCalls
+        } else {
+            val missed = allRecentCalls.filterIsInstance<RecentCall>().filter { it.type == Calls.MISSED_TYPE }
+            groupCallsByDate(missed)
+        }
+        showOrHidePlaceholder(toShow.isEmpty())
+        recentsAdapter?.updateItems(toShow)
     }
 
     override fun setupColors(textColor: Int, primaryColor: Int, properPrimaryColor: Int) {
@@ -88,8 +126,7 @@ class RecentsFragment(
 
     override fun onSearchClosed() {
         searchQuery = null
-        showOrHidePlaceholder(allRecentCalls.isEmpty())
-        recentsAdapter?.updateItems(allRecentCalls)
+        applyDisplayFilter()
     }
 
     override fun onSearchQueryChanged(text: String) {
@@ -179,10 +216,8 @@ class RecentsFragment(
                 )
 
                 binding.recentsList.adapter = recentsAdapter
-                recentsAdapter?.updateItems(recents)
-            } else {
-                recentsAdapter?.updateItems(recents)
             }
+            applyDisplayFilter()
         }
     }
 

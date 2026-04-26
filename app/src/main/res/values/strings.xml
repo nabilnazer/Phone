@@ -4,6 +4,14 @@
     <string name="default_phone_app_prompt">Please make this app the default Phone app</string>
     <string name="allow_displaying_over_other_apps">Please allow displaying over other apps for reliable behaviour</string>
 
+    <!-- Custom Phone tab label (overrides Commons "call_history_tab" which says "Recents") -->
+    <string name="call_history_tab">Phone</string>
+
+    <!-- Phone tab All/Missed filter pill -->
+    <string name="filter_all">All</string>
+    <string name="filter_missed">Missed</string>
+    <string name="show_call_info">Show call info</string>
+
     <!-- Contacts -->
     <string name="could_not_access_contacts">Could not access your contacts</string>
 

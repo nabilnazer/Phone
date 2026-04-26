@@ -62,6 +62,7 @@ fun getCallContact(context: Context, call: Call?, callback: (CallContact) -> Uni
                 if (contact != null) {
                     callContact.name = contact.getNameToDisplay()
                     callContact.photoUri = contact.photoUri
+                    callContact.company = contact.organization.company
 
                     if (contact.phoneNumbers.size > 1) {
                         val specificPhoneNumber = contact.phoneNumbers.firstOrNull { it.value == number }

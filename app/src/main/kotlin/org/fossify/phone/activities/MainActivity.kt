@@ -429,12 +429,12 @@ class MainActivity : SimpleActivity() {
 
         binding.mainTabsHolder.onTabSelectionChanged(
             tabUnselectedAction = {
-                updateBottomTabItemColors(it.customView, false, getDeselectedTabDrawableIds()[it.position])
+                applyTabColors(it.customView, isSelected = false, drawableId = getDeselectedTabDrawableIds()[it.position])
             },
             tabSelectedAction = {
                 getCurrentFragment()?.onSearchQueryChanged(binding.mainMenu.getCurrentQuery())
                 binding.viewPager.currentItem = it.position
-                updateBottomTabItemColors(it.customView, true, getSelectedTabDrawableIds()[it.position])
+                applyTabColors(it.customView, isSelected = true, drawableId = getSelectedTabDrawableIds()[it.position])
 
                 val lastPosition = binding.mainTabsHolder.tabCount - 1
                 if (it.position == lastPosition && config.showTabs and TAB_CALL_HISTORY > 0) {
@@ -456,6 +456,18 @@ class MainActivity : SimpleActivity() {
         }
 
         return resources.getColoredDrawableWithColor(drawableId, getProperTextColor())
+    }
+
+    private fun applyTabColors(customView: android.view.View?, isSelected: Boolean, drawableId: Int) {
+        val color = if (isSelected) {
+            androidx.core.content.ContextCompat.getColor(this, R.color.tab_active_green)
+        } else {
+            getProperTextColor()
+        }
+        customView?.findViewById<ImageView>(R.id.tab_item_icon)?.setImageDrawable(
+            resources.getColoredDrawableWithColor(drawableId, color)
+        )
+        customView?.findViewById<TextView>(R.id.tab_item_label)?.setTextColor(color)
     }
 
     private fun getTabLabel(position: Int): String {

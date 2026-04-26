@@ -12,6 +12,9 @@
     <dimen name="call_control_button_size">72dp</dimen>
     <dimen name="recyclerview_fab_padding">100dp</dimen>
 
+    <!-- Used by redesigned call log entry row (Build 1) -->
+    <dimen name="small_icon_size">20dp</dimen>
+
     <dimen name="caller_name_text_size">34sp</dimen>
     <dimen name="call_status_text_size">20sp</dimen>
 

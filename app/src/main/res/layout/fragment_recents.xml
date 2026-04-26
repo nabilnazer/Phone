@@ -5,10 +5,52 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <LinearLayout
+        android:id="@+id/filter_pill_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="@dimen/normal_margin"
+        android:layout_marginTop="@dimen/small_margin"
+        android:layout_marginBottom="@dimen/small_margin"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/filter_pill_all"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_filter_pill_active"
+            android:clickable="true"
+            android:focusable="true"
+            android:paddingHorizontal="@dimen/activity_margin"
+            android:paddingVertical="@dimen/small_margin"
+            android:text="@string/filter_all"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:textSize="@dimen/normal_text_size" />
+
+        <TextView
+            android:id="@+id/filter_pill_missed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/small_margin"
+            android:background="@drawable/bg_filter_pill_inactive"
+            android:clickable="true"
+            android:focusable="true"
+            android:paddingHorizontal="@dimen/activity_margin"
+            android:paddingVertical="@dimen/small_margin"
+            android:text="@string/filter_missed"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:textSize="@dimen/normal_text_size" />
+
+    </LinearLayout>
+
     <org.fossify.commons.views.MyTextView
         android:id="@+id/recents_placeholder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/filter_pill_container"
         android:layout_centerHorizontal="true"
         android:alpha="0.8"
         android:gravity="center"
@@ -37,6 +79,7 @@
         android:id="@+id/recents_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/filter_pill_container"
         android:clipToPadding="false"
         android:layoutAnimation="@anim/layout_animation"
         android:paddingBottom="@dimen/recyclerview_fab_padding"

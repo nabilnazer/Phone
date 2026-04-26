@@ -4,4 +4,7 @@
     <color name="color_missed_call">@color/md_red_500_dark</color>
     <color name="color_outgoing_call">@color/md_green_600</color>
     <color name="color_incoming_call">@color/md_blue_600</color>
+    <color name="tab_active_green">#1FAB52</color>
+    <color name="filter_pill_active_bg">#1FAB52</color>
+    <color name="filter_pill_inactive_bg">#1F808080</color>
 </resources>

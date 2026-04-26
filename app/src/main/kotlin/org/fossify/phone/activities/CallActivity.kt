@@ -578,6 +578,7 @@ class CallActivity : SimpleActivity() {
 
         binding.apply {
             val (name, _, number, numberLabel) = callContact!!
+            val company = callContact!!.company
             callerNameLabel.text = name.ifEmpty { getString(R.string.unknown_caller) }
             if (number.isNotEmpty() && number != name) {
                 callerNumber.text = number
@@ -588,6 +589,9 @@ class CallActivity : SimpleActivity() {
             } else {
                 callerNumber.beGone()
             }
+
+            callerCompany.text = company
+            callerCompany.beVisibleIf(company.isNotBlank())
 
             callerAvatar.apply {
                 if (avatarUri.isNullOrEmpty()) {
