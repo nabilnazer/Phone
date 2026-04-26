@@ -28,13 +28,15 @@ fun SimpleActivity.launchCreateNewContactIntent() {
 // Build 2: every entry point that previously delegated to the system Contacts viewer now
 // opens our custom ContactDetailActivity. The phone-number argument lets the new screen
 // highlight the most-recently-used number with a "Recents" badge.
+//
+// We pass contact.id (a.k.a. rawId, the raw_contact_id) — that's what
+// ContactsHelper.getContactWithId queries on. contactId (the aggregated id) does NOT work.
 fun Activity.startContactDetailsIntent(contact: Contact, phoneNumber: String? = null) {
     if (this is SimpleActivity) {
-        ContactDetailActivity.launchKnownContact(this, contact.contactId, phoneNumber)
+        ContactDetailActivity.launchKnownContact(this, contact.id, phoneNumber)
     } else {
-        // Fallback for non-SimpleActivity callers (rare). Build the intent directly.
         val intent = Intent(this, ContactDetailActivity::class.java).apply {
-            putExtra(ContactDetailActivity.EXTRA_CONTACT_ID, contact.contactId)
+            putExtra(ContactDetailActivity.EXTRA_CONTACT_ID, contact.id)
             if (phoneNumber != null) putExtra(ContactDetailActivity.EXTRA_PHONE_NUMBER, phoneNumber)
         }
         startActivity(intent)
